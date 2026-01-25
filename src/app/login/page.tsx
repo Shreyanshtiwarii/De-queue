@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { Mail, Lock, ArrowRight, ShoppingBag, Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 
-export default function LoginPage() {
+function LoginContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const role = searchParams.get('role') || 'user';
@@ -100,5 +100,17 @@ export default function LoginPage() {
                 </motion.div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+                <Loader2 className="animate-spin text-indigo-600" size={48} />
+            </div>
+        }>
+            <LoginContent />
+        </Suspense>
     );
 }
