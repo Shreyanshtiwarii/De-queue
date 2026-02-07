@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { User, ShoppingBag, ArrowRight, ShieldCheck } from "lucide-react";
+import { User, ArrowRight, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {

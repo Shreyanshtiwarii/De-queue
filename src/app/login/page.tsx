@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, Suspense } from 'react';
-import { Mail, Lock, ArrowRight, ShoppingBag, Loader2 } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { useStore } from '@/lib/store';
 
 function LoginContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const role = searchParams.get('role') || 'user';
+    const setUserRole = useStore((state) => state.setUserRole);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,7 +23,9 @@ function LoginContent() {
         // Simulate login delay
         setTimeout(() => {
             setIsLoading(false);
-            if (role === 'admin') {
+            const userRole = role === 'admin' ? 'admin' : 'user';
+            setUserRole(userRole);
+            if (userRole === 'admin') {
                 router.push('/admin');
             } else {
                 router.push('/customer');
@@ -94,7 +98,7 @@ function LoginContent() {
 
                     <div className="mt-8 pt-8 border-t border-slate-50 text-center">
                         <p className="text-slate-400 text-sm">
-                            Don't have an account? <button className="text-indigo-600 font-bold">Sign Up</button>
+                            Don&apos;t have an account? <button className="text-indigo-600 font-bold">Sign Up</button>
                         </p>
                     </div>
                 </motion.div>

@@ -21,6 +21,44 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Hide default html5-qrcode scanner borders and visual elements */
+#reader__scan_region,
+#admin-reader__scan_region {
+  border: none !important;
+}
+
+#reader__dashboard_section,
+#admin-reader__dashboard_section {
+  display: none !important;
+}
+
+/* Hide the shaded region overlay that html5-qrcode creates */
+#reader__scan_region>img,
+#admin-reader__scan_region>img,
+#qr-shaded-region {
+  display: none !important;
+}
+
+/* Hide the scanning region border/frame */
+div[style*="border"] {
+  border: none !important;
+}
+
+/* Ensure video fills the container properly */
+#reader video,
+#admin-reader video {
+  border-radius: 0 !important;
+  object-fit: cover !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Position canvas for scanning */
+#reader canvas,
+#admin-reader canvas {
+  display: none !important;
+}
+
 /* Custom Utilities */
 .glass {
   background: rgba(255, 255, 255, 0.7);

@@ -122,22 +122,22 @@ export default function ScannerPage() {
 
                 {/* Scanner View */}
                 <div className="flex-1 flex flex-col items-center justify-center relative">
-                    <div id="reader" className="w-full h-full"></div>
+                    <div id="reader" className="w-full max-w-md"></div>
 
                     {isScanning && !showManualInput && (
                         <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
-                            <div className="w-64 h-40 border-2 border-indigo-500 rounded-2xl relative">
-                                <div className="absolute top-0 left-0 w-4 h-4 border-t-4 border-l-4 border-indigo-400 -mt-1 -ml-1 rounded-tl-md"></div>
-                                <div className="absolute top-0 right-0 w-4 h-4 border-t-4 border-r-4 border-indigo-400 -mt-1 -mr-1 rounded-tr-md"></div>
-                                <div className="absolute bottom-0 left-0 w-4 h-4 border-b-4 border-l-4 border-indigo-400 -mb-1 -ml-1 rounded-bl-md"></div>
-                                <div className="absolute bottom-0 right-0 w-4 h-4 border-b-4 border-r-4 border-indigo-400 -mb-1 -mr-1 rounded-br-md"></div>
+                            <div className="w-[250px] h-[150px] border-4 border-white rounded-2xl relative">
+                                <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-indigo-400 rounded-tl-lg"></div>
+                                <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-indigo-400 rounded-tr-lg"></div>
+                                <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-indigo-400 rounded-bl-lg"></div>
+                                <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-indigo-400 rounded-br-lg"></div>
                                 <motion.div
                                     animate={{ top: ["0%", "100%", "0%"] }}
                                     transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                                     className="absolute left-0 right-0 h-0.5 bg-indigo-400 shadow-[0_0_10px_rgba(129,140,248,0.8)]"
                                 />
                             </div>
-                            <p className="text-white/60 mt-8 text-sm font-medium tracking-widest uppercase">Align Barcode within frame</p>
+                            <p className="text-white font-bold mt-6 text-sm uppercase tracking-widest">Align Barcode Within Frame</p>
                         </div>
                     )}
 

@@ -4,7 +4,6 @@ import { useStore } from '@/lib/store';
 import {
     ArrowLeft,
     ShoppingCart,
-    Trash2,
     Plus,
     Minus,
     ArrowRight,
@@ -13,9 +12,10 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 export default function CartPage() {
-    const { cart, updateQuantity, removeFromCart } = useStore();
+    const { cart, updateQuantity } = useStore();
     const router = useRouter();
 
     const getTotalPrice = () => {
@@ -68,8 +68,13 @@ export default function CartPage() {
                                     exit={{ opacity: 0, x: 20 }}
                                     className="bg-white p-4 rounded-[32px] shadow-sm border border-slate-100 flex gap-4"
                                 >
-                                    <div className="w-20 h-20 bg-slate-50 rounded-2xl overflow-hidden flex-shrink-0">
-                                        <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                                    <div className="w-20 h-20 bg-slate-50 rounded-2xl overflow-hidden flex-shrink-0 relative">
+                                        <Image
+                                            src={item.image}
+                                            alt={item.name}
+                                            fill
+                                            className="object-cover"
+                                        />
                                     </div>
                                     <div className="flex-1 flex flex-col justify-between">
                                         <div>

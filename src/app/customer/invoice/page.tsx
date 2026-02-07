@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Download, Share2, Printer, ShoppingBag, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Download, Share2, Printer, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 

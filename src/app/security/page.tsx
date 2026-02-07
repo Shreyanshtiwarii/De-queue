@@ -2,39 +2,22 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
-import { Shield, Scan, Weight, CheckCircle2, AlertCircle, ArrowRight, RefreshCw, LogOut } from 'lucide-react';
+import { Shield, Weight, CheckCircle2, AlertCircle, ArrowRight, RefreshCw, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+interface ReceiptData {
+    receiptId: string;
+    expectedWeight: number;
+    totalPrice: number;
+    items: Array<{ name: string; quantity: number }>;
+}
 
 export default function SecurityVerification() {
     const [step, setStep] = useState<'scan' | 'weight' | 'result'>('scan');
-    const [receiptData, setReceiptData] = useState<any>(null);
+    const [receiptData, setReceiptData] = useState<ReceiptData | null>(null);
     const [actualWeight, setActualWeight] = useState<number>(0);
     const [isVerifying, setIsVerifying] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const scannerRef = useRef<Html5Qrcode | null>(null);
-
-    useEffect(() => {
-        if (step === 'scan') {
-            const html5QrCode = new Html5Qrcode("security-reader");
-            scannerRef.current = html5QrCode;
-
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: 250 },
-                onScanSuccess,
-                () => { }
-            ).catch(err => {
-                console.error("Scanner error", err);
-                setError("Camera access required for verification.");
-            });
-        }
-
-        return () => {
-            if (scannerRef.current) {
-                scannerRef.current.stop().catch(console.error);
-            }
-        };
-    }, [step]);
 
     const onScanSuccess = (decodedText: string) => {
         // In a real app, fetch receipt details from API
@@ -52,6 +35,28 @@ export default function SecurityVerification() {
         if (scannerRef.current) scannerRef.current.stop();
     };
 
+    useEffect(() => {
+        if (step === 'scan') {
+            const html5QrCode = new Html5Qrcode("security-reader");
+            scannerRef.current = html5QrCode;
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                onScanSuccess,
+                () => { }
+            ).catch(err => {
+                console.error("Scanner error", err);
+            });
+        }
+
+        return () => {
+            if (scannerRef.current) {
+                scannerRef.current.stop().catch(console.error);
+            }
+        };
+    }, [step]);
+
     const handleWeightVerification = () => {
         setIsVerifying(true);
         setTimeout(() => {
@@ -64,7 +69,6 @@ export default function SecurityVerification() {
         setStep('scan');
         setReceiptData(null);
         setActualWeight(0);
-        setError(null);
     };
 
     const weightMismatch = Math.abs(actualWeight - (receiptData?.expectedWeight || 0)) > 50; // 50g tolerance
@@ -93,10 +97,10 @@ export default function SecurityVerification() {
                         <div
                             key={i}
                             className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${(i === 1 && step === 'scan') || (i === 2 && step === 'weight') || (i === 3 && step === 'result')
-                                    ? "bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-                                    : i < (step === 'scan' ? 1 : step === 'weight' ? 2 : 4)
-                                        ? "bg-emerald-500"
-                                        : "bg-white/10"
+                                ? "bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+                                : i < (step === 'scan' ? 1 : step === 'weight' ? 2 : 4)
+                                    ? "bg-emerald-500"
+                                    : "bg-white/10"
                                 }`}
                         />
                     ))}
@@ -113,7 +117,7 @@ export default function SecurityVerification() {
                         >
                             <div className="mb-8">
                                 <h2 className="text-2xl font-bold mb-2">Scan Receipt</h2>
-                                <p className="text-white/60">Scan the QR code on the customer's digital receipt to begin verification.</p>
+                                <p className="text-white/60">Scan the QR code on the customer&apos;s digital receipt to begin verification.</p>
                             </div>
 
                             <div className="relative flex-1 min-h-[300px] bg-black rounded-[40px] overflow-hidden border border-white/10 shadow-2xl">
@@ -133,7 +137,7 @@ export default function SecurityVerification() {
                         </motion.div>
                     )}
 
-                    {step === 'weight' && (
+                    {step === 'weight' && receiptData && (
                         <motion.div
                             key="weight"
                             initial={{ opacity: 0, x: 20 }}
@@ -176,7 +180,7 @@ export default function SecurityVerification() {
                             <div className="bg-white/5 rounded-3xl p-6 mb-8 border border-white/5">
                                 <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4">Items Summary</h3>
                                 <div className="space-y-3">
-                                    {receiptData.items.map((item: any, i: number) => (
+                                    {receiptData.items.map((item, i) => (
                                         <div key={i} className="flex justify-between text-sm">
                                             <span className="text-white/80">{item.name}</span>
                                             <span className="font-bold">x{item.quantity}</span>
@@ -205,7 +209,7 @@ export default function SecurityVerification() {
                         </motion.div>
                     )}
 
-                    {step === 'result' && (
+                    {step === 'result' && receiptData && (
                         <motion.div
                             key="result"
                             initial={{ opacity: 0, scale: 0.9 }}
